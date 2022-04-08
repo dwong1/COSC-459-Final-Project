@@ -1,6 +1,6 @@
 import simpy
 import random
-import numpy 
+import numpy
 
 NO_OF_CUSTOMERS = 20                          
 NO_OF_CASHIERS = 2
