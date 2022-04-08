@@ -2,7 +2,6 @@ import simpy
 import random
 import numpy 
 
-
 NO_OF_CUSTOMERS = 20                          
 NO_OF_CASHIERS = 2
 NO_OF_BARISTAS = 3
@@ -59,4 +58,3 @@ print("Average wait time in payment queue: %.1f seconds." % (numpy.mean(payment_
 print("Average time until making the payment: %.1f seconds." % (numpy.mean(payment_time)))
 print("Average wait time in order queue: %.1f seconds." % (numpy.mean(order_wait_time)))
 print("Average time until order is serviced: %.1f seconds." % (numpy.mean(order_time)))
-
