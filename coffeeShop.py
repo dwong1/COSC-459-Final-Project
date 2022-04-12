@@ -6,17 +6,25 @@ NUM_CUSTOMERS = 100
 NUM_CASHIERS = 1
 NUM_BARISTAS = 1
 
-Menu = {1:["Regular Coffee",10,15], 2:["Latte",30,45], 
-        3:["Mocha",30,45], 4:["Cold Brew",10,20], 5:["Frappe",50,70], 
+#Menus for the coffee shop
+Menu = {1:["Regular Coffee",10,15],
+        2:["Latte",30,45], 
+        3:["Mocha",30,45], 
+        4:["Cold Brew",10,20], 
+        5:["Frappe",50,70], 
         6:["Espresso",20,35]}
-Payment = {1:["Cash",15,30], 2:["Card",10,20]}
+
+#Payments required for coffee
+Payment = {1:["Cash",15,30], 
+            2:["Card",10,20]}
 
 Payment_Wait_Time = []  #list to hold the time until a cashier is available
 Payment_Time = []       #list to hold the time taken to make payments
 Order_Wait_Time = []    #list to hold te time until a barista is available
 Order_Time = []         #list to hold the time taken to prepare the order
 
-def generate_customer(env, cashier, barista):
+#Creates a customer
+def create_customer(env, cashier, barista):
     for i in range(NUM_CUSTOMERS):
         yield env.timeout(random.randint(1,20))
         env.process(customer(env, i, cashier, barista))
@@ -30,7 +38,7 @@ def customer(env, name, cashier, barista):
         Payment_Wait_Time.append(env.now-start_cq)
         menu_item = random.randint(1,6)
         payment_type = random.randint(1,2)
-        time_to_order = random.randint(Payment[payment_type][1],            Payment[payment_type][2])
+        time_to_order = random.randint(Payment[payment_type][1], Payment[payment_type][2])
         payment_name = Payment[payment_type][0]
         yield env.timeout(time_to_order)
         print("> > > Customer %s finished paying by %s in %.1f seconds" % (name, payment_name, env.now-start_cq))
@@ -50,7 +58,7 @@ env = simpy.Environment()
 cashier = simpy.Resource(env, NUM_CASHIERS)
 barista = simpy.Resource(env, NUM_BARISTAS)
 
-env.process(generate_customer(env, cashier, barista))
+env.process(create_customer(env, cashier, barista))
 env.run(until=400)
 
 print("\n\nWITH %s CASHIERS and %s BARISTAS and %s SERIALLY ARRIVING CUSTOMERS..." % (NUM_CASHIERS, NUM_BARISTAS, NUM_CUSTOMERS))
