@@ -2,11 +2,13 @@ import simpy
 import random
 import numpy
 
+#Constants for testing
 NUM_CUSTOMERS = 100                          
 NUM_CASHIERS = 1
 NUM_BARISTAS = 1
 
-#Menus for the coffee shop
+#Items on menu for the coffee shop
+#Dictionary has item name as well as time it takes to prepare each item.
 Menu = {1:["Regular Coffee",10,15],
         2:["Latte",30,45], 
         3:["Mocha",30,45], 
@@ -14,16 +16,16 @@ Menu = {1:["Regular Coffee",10,15],
         5:["Frappe",50,70], 
         6:["Espresso",20,35]}
 
-#Payments required for coffee
+#The time each by payment method to process
 Payment = {1:["Cash",15,30], 
-            2:["Card",10,20]}
+           2:["Card",10,20]}
 
 Payment_Wait_Time = []  #list to hold the time until a cashier is available
 Payment_Time = []       #list to hold the time taken to make payments
-Order_Wait_Time = []    #list to hold te time until a barista is available
+Order_Wait_Time = []    #list to hold the time until a barista is available
 Order_Time = []         #list to hold the time taken to prepare the order
 
-#Creates a customer
+#Creates a customers
 def create_customer(env, cashier, barista):
     for i in range(NUM_CUSTOMERS):
         yield env.timeout(random.randint(1,20))
@@ -31,7 +33,9 @@ def create_customer(env, cashier, barista):
 
 
 def customer(env, name, cashier, barista):
+    
     print("Customer %s arrived at time %.1f" % (name, env.now))
+   
     with cashier.request() as req:
         start_cq = env.now
         yield req
@@ -41,7 +45,7 @@ def customer(env, name, cashier, barista):
         time_to_order = random.randint(Payment[payment_type][1], Payment[payment_type][2])
         payment_name = Payment[payment_type][0]
         yield env.timeout(time_to_order)
-        print("> > > Customer %s finished paying by %s in %.1f seconds" % (name, payment_name, env.now-start_cq))
+        print("Customer %s finished paying by %s in %.1f seconds" % (name, payment_name, env.now-start_cq))
         Payment_Time.append(env.now-start_cq)
         
     with barista.request() as req:
@@ -51,7 +55,7 @@ def customer(env, name, cashier, barista):
         time_to_prepare = random.randint(Menu[menu_item][1], Menu[menu_item][2])
         item_name = Menu[menu_item][0]
         yield env.timeout(time_to_prepare)
-        print(">> >> >> Customer %s served %s in %.1f seconds" % (name, item_name, env.now-start_cq))
+        print("Customer %s served %s in %.1f seconds" % (name, item_name, env.now-start_cq))
         Order_Time.append(env.now-start_cq)
 
 env = simpy.Environment()
