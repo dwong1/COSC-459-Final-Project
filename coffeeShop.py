@@ -3,7 +3,7 @@ import random
 import numpy
 
 #Constants for testing
-NUM_CUSTOMERS = 100                          
+NUM_CUSTOMERS = 20                          
 NUM_CASHIERS = 1
 NUM_BARISTAS = 1
 
@@ -25,15 +25,16 @@ Payment_Time = []       #list to hold the time taken to make payments
 Order_Wait_Time = []    #list to hold the time until a barista is available
 Order_Time = []         #list to hold the time taken to prepare the order
 
-#Creates a customers
-def create_customer(env, cashier, barista):
+#Generates customers
+def create_customer (env, cashier, barista):
     for i in range(NUM_CUSTOMERS):
         yield env.timeout(random.randint(1,20))
-        env.process(customer(env, i, cashier, barista))
+        env.process(simulation(env, i, cashier, barista))
 
 
-def customer(env, name, cashier, barista):
+def simulation (env, name, cashier, barista):
     
+    #Prints customer number as well as arrival time
     print("Customer %s arrived at time %.1f" % (name, env.now))
    
     with cashier.request() as req:
