@@ -1,3 +1,6 @@
+#https://joecoelhosj.github.io/tutorial/simpy-example/
+#The above guide was followed, the code below is commented to show we unserstand the process the guide writer followed to acheive the required results
+
 import simpy
 import random
 import numpy
