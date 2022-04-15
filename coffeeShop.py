@@ -1,5 +1,5 @@
 #https://joecoelhosj.github.io/tutorial/simpy-example/
-#The above guide was followed, the code below is commented to show we understand the process the guide writer followed to acheive the required results
+#The above guide was followed, the code below is commented to show we understand the process the guide writer followed to acheive the results
 
 #Required packages
 import simpy
@@ -24,10 +24,17 @@ Menu = {1:["Regular Coffee",10,15],
 Payment = {1:["Cash",15,30], 
            2:["Card",10,20]}
 
-Payment_Wait_Time = []  #List to hold the time until a cashier is available
-Payment_Time = []       #List to hold the time taken to make payments
-Order_Wait_Time = []    #List to hold the time until a barista is available
-Order_Time = []         #List to hold the time taken to prepare the order
+#List to hold the time until a cashier is available
+Payment_Wait_Time = []
+
+#List to hold the time taken to make payments
+Payment_Time = []
+
+#List to hold the time until a barista is available
+Order_Wait_Time = []
+
+#List to hold the time taken to prepare the order
+Order_Time = []         
 
 #Generates customers
 def create_customer (env, cashier, barista):
@@ -63,10 +70,10 @@ def simulation (env, name, cashier, barista):
         print("Customer %s served %s in %.1f seconds" % (name, item_name, env.now-start_cashier_que))
         Order_Time.append(env.now-start_cashier_que)
 
+#Creates simulation enviornment
 env = simpy.Environment()
 cashier = simpy.Resource(env, NUM_CASHIERS)
 barista = simpy.Resource(env, NUM_BARISTAS)
-
 env.process(create_customer(env, cashier, barista))
 env.run(until=400)
 
