@@ -37,7 +37,7 @@ Order_Wait_Time = []
 Order_Time = []         
 
 #Generates customers
-def create_customer (env, cashier, barista):
+def generate_customer (env, cashier, barista):
     for i in range(NUM_CUSTOMERS):
         yield env.timeout(random.randint(1,20))
         env.process(simulation(env, i, cashier, barista))
@@ -72,9 +72,11 @@ def simulation (env, name, cashier, barista):
 
 #Creates simulation enviornment
 env = simpy.Environment()
+
 cashier = simpy.Resource(env, NUM_CASHIERS)
 barista = simpy.Resource(env, NUM_BARISTAS)
-env.process(create_customer(env, cashier, barista))
+env.process(generate_customer(env, cashier, barista))
+#Run for 6.5 minutes
 env.run(until=400)
 
 print("\n\nWITH %s CASHIERS and %s BARISTAS and %s SERIALLY ARRIVING CUSTOMERS..." % (NUM_CASHIERS, NUM_BARISTAS, NUM_CUSTOMERS))
